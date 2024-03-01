@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Usuarios";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--lista-->
+<ol class="breadcrumb mb-4 mt-4">
+    <li class="breadcrumb-item"><a href="index.html">Resumen</a></li>
+    <li class="breadcrumb-item active">Charts</li>
+</ol>
+
+<!--Carta-->
+<div class="card">
+    <div class="card-header">
+        <!--icono-->
+        <i class="fas fa-users me-1"></i> Lista de usuarios
+    </div>
+
+    <div class="card-body">
+        <!--
+        <h5 class="card-title">Special title</h5>
+        <p class="card-text"> text below</p>
+        <a href="#" class="btn btn-primary"> Go somewhere</a>
+            -->
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="btn btn-success">Crear Usuario</button>
+            </div>
+        </div>
+
+        <hr />
+
+        <table id="tabla" class="display cell-border" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Correo</th>
+                    <th>Activo</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--para llamar la seccion de la master page que tiene la ruta scripts para llamar los
+    usuarios-->
+@section scripts{
+        <script>
+            //implementando jquery de la libreria
+            
+            jQuery.ajax({
+                //se pone el nombre de la funcion que tiene la lista de los usuarios
+                //y el controlador
+                url: '@Url.Action("ListarUsuarios","Home")',
+                type: "GET", //de tipo get
+                dataType: "json", //se maneja con json
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //esto se ejecuta cuando la operacion se ejecuto correctamente
+                    debugger;
+                    var texto1 = "HOla soy una prueba";
+
+                    console.log(data);//prueba
+                }
+            })
+        </script>
+   
+    }
