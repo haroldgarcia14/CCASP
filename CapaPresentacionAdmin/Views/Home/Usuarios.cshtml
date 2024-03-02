@@ -50,9 +50,16 @@
 <!--para llamar la seccion de la master page que tiene la ruta scripts para llamar los
     usuarios-->
 @section scripts{
-        <script>
+    <script>
+
+
+            //creando DataTable para los datos
+            var tabladata;
+
+
+
             //implementando jquery de la libreria
-            
+
             jQuery.ajax({
                 //se pone el nombre de la funcion que tiene la lista de los usuarios
                 //y el controlador
@@ -62,12 +69,32 @@
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     //esto se ejecuta cuando la operacion se ejecuto correctamente
-                    debugger;
+                    /*debugger;
                     var texto1 = "HOla soy una prueba";
-
+                    */
                     console.log(data);//prueba
                 }
             })
-        </script>
+
+
+            $(function () {
+                                //llamando variable
+                //idenfiticador para el id del html
+                tabladata = $("#tabla").DataTable({
+                    responsive: true, //responsiva en entorno movil
+                    ordering: false, //ordenamiento de las columnas
+                    "ajax": {
+                        url: '@Url.Action("ListarUsuarios","Home")',
+                        type: "GET",
+                        dataType: "json"
+                    },
+                    "columns": [ //se especifican todas las columnas a emplear en la tabla
+                        {"data":"Nombres"}, //el origen de la variable data del controlador Home ListarUsuarios
+                        {"data":"Apellidos"}
+                    ]
+
+                });
+            });
+    </script>
    
     }
