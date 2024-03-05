@@ -13,8 +13,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    
+    @*forma de conseguir los estilos de todo el layout(tambien datatables,etc) (2`)*@
     @Styles.Render("~/Content/css")
+    <!--
+        
+        forma de conseguir los estilos de dataTables(1`)
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
+        -->
 
     @*No se usara*@
     @*
@@ -168,13 +174,18 @@
     *@
 
     @*Archivos JS de bootstrap*@
+    <!--
+        forma de obtener las librerias de Jquery y dataTables
 
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+        -->
+
+    @Scripts.Render("~/bundles/jquery")
 
     @Scripts.Render("~/bundles/complementos")
 
-    @*Scripts.Render("~/bundles/jquery")*@
+
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 

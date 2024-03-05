@@ -1,0 +1,29 @@
+[33mcommit 6f1bb8c905930de1f65264f5a5f7bafba93aaae9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mDev1[m[33m, [m[1;32mDev2[m[33m)[m
+Author: haroldgarcia14 <osmanyg14@gmail.com>
+Date:   Mon Mar 4 21:54:31 2024 -0600
+
+    arreglo de bundles y enlaces jquery, datatables, css(un metodo)
+
+[33mcommit 02b9144ca10dfd2e80041d6850fab9dd60d129d9[m[33m ([m[1;31morigin/Dev1[m[33m)[m
+Author: haroldgarcia14 <osmanyg14@gmail.com>
+Date:   Fri Mar 1 20:28:29 2024 -0600
+
+    avance de bundles(revisar)
+
+[33mcommit 2618ae9e658c220094d2750ddc75b8e1ba4e66ca[m[33m ([m[1;31morigin/Prod[m[33m, [m[1;32mTest[m[33m, [m[1;32mProd[m[33m)[m
+Author: haroldgarcia14 <osmanyg14@gmail.com>
+Date:   Fri Mar 1 16:08:17 2024 -0600
+
+    Commit de configuración de Bundles agregando librerias de dataTable JS y CSS
+
+[33mcommit 77360101d739c4201d8bdd5fc657fe0109f06f99[m[33m ([m[1;31morigin/Test[m[33m)[m
+Author: haroldgarcia14 <HaroldGarcia@DESKTOP-1VFS4OV>
+Date:   Thu Feb 29 21:55:33 2024 -0600
+
+    Agregar archivos de proyecto.
+
+[33mcommit f09fadfc4964ff7b3ee298a96ad677f9027469f1[m
+Author: haroldgarcia14 <HaroldGarcia@DESKTOP-1VFS4OV>
+Date:   Thu Feb 29 21:55:27 2024 -0600
+
+    Agregue .gitattributes, .gitignore, README.md y LICENSE.txt.
