@@ -25,7 +25,7 @@
             -->
         <div class="row">
             <div class="col-12">
-                <button type="button" class="btn btn-success">Crear Usuario</button>
+                <button type="button" class="btn btn-success btn-sm">Crear Usuario</button>
             </div>
         </div>
 
@@ -38,6 +38,7 @@
                     <th>Apellidos</th>
                     <th>Correo</th>
                     <th>Activo</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -91,7 +92,32 @@
                     { "data": "Nombres" }, //el origen de la variable data del controlador Home ListarUsuarios
                     { "data": "Apellidos" },
                     { "data": "Correo" },
-                    { "data": "Activo" }
+                    {
+                        //condicion que muestra el resultado de activo con un string
+                        "data": "Activo", "render": function (valor) {
+                            if (valor) {
+                                return '<span class="badge bg-success">Si</span>';
+                            } else {
+                                return '<span class="badge bg-danger">No</span>';
+                            }
+                        }
+                    },
+                    {
+                        //botones en la tabla para editar o eliminar registros de usuarios
+                        //para editar usuarios
+                        "defaultContent": '<button type="button" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i></button>' +
+                                //para eliminar usuarios
+                            '<button type="button" class="btn btn-danger btn-sm ms-2"><i class="fas fa-trash"></i></button>',
+
+                        //quitar ordenamiento
+                        "orderable": false,
+
+                        //para que no aparezca en el text de busqueda 
+                        "searchable": false,
+
+                        //cuanto es el ancho de la columna de los botones
+                        "width": "90px"
+                    }
                 ]  
                 });
         });
