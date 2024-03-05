@@ -31,7 +31,7 @@
 
         <hr />
 
-        <table id="tabla" class="display cell-border" style="width: 100%">
+        <table id="tabla2" class="display cell-border" style="width: 100%">
             <thead>
                 <tr>
                     <th>Nombres</th>
@@ -76,25 +76,25 @@
                 }
             })
 
-
-            $(function () {
-                                //llamando variable
+        $(document).ready(function () {
+                                            //llamando variable
                 //idenfiticador para el id del html
-                tabladata = $("#tabla").DataTable({
-                    responsive: true, //responsiva en entorno movil
-                    ordering: false, //ordenamiento de las columnas
-                    "ajax": {
-                        url: '@Url.Action("ListarUsuarios","Home")',
-                        type: "GET",
-                        dataType: "json"
-                    },
-                    "columns": [ //se especifican todas las columnas a emplear en la tabla
-                        {"data":"Nombres"}, //el origen de la variable data del controlador Home ListarUsuarios
-                        {"data":"Apellidos"}
-                    ]
-
+            tabladata = $("#tabla2").DataTable({
+                responsive: true, //responsiva en entorno movil
+                ordering: false, //ordenamiento de las columnas
+                "ajax": {
+                    url: '@Url.Action("ListarUsuarios","Home")',
+                    type: "GET",
+                    dataType: "json"
+                },
+                "columns": [ //se especifican todas las columnas a emplear en la tabla(se ponen todos los campos de la tabla)
+                    { "data": "Nombres" }, //el origen de la variable data del controlador Home ListarUsuarios
+                    { "data": "Apellidos" },
+                    { "data": "Correo" },
+                    { "data": "Activo" }
+                ]  
                 });
-            });
+        });
     </script>
    
     }
