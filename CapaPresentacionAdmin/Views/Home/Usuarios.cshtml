@@ -25,34 +25,97 @@
             -->
         <div class="row">
             <div class="col-12">
-                <button type="button" class="btn btn-success">Crear Usuario</button>
+                <button type="button" class="btn btn-success" onclick="abrirModal()">Crear Usuario</button>
             </div>
         </div>
 
         <hr />
 
-        <table id="tabla" class="display cell-border" style="width: 100%">
+        <table id="tabla2" class="display cell-border" style="width: 100%">
             <thead>
                 <tr>
                     <th>Nombres</th>
                     <th>Apellidos</th>
                     <th>Correo</th>
                     <th>Activo</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-
             </tbody>
         </table>
     </div>
 </div>
 
+<!--Modal con bootstrap 5 (para editar los datos de la tabla)
+    
+    -se abrira con un boton que se llama 'Crear Usuario'
+    -->
+<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Usuarios</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <label for="txtnombres" class="form-label">Nombres</label>
+                        <input type="text" class="form-control" id="txtnombres">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="txtapellidos" class="form-label">Apellidos</label>
+                        <input type="text" class="form-control" id="txtapellidos">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="txtcorreo" class="form-label">Correo</label>
+                        <input type="email" class="form-control" id="txtcorreo">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1" class="form-label">Activo</label>
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <!--para llamar la seccion de la master page que tiene la ruta scripts para llamar los
     usuarios-->
 @section scripts{
-        <script>
+    <script>
+
+
+            //creando DataTable para los datos
+            var tabladata;
+
+
+
             //implementando jquery de la libreria
-            
+
+
+            /*
+            * esta funcion de ajax solo es de ejemplo para poder ver la lista de los datos en la consola(no es necesario)
+            */
             jQuery.ajax({
                 //se pone el nombre de la funcion que tiene la lista de los usuarios
                 //y el controlador
@@ -62,12 +125,72 @@
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     //esto se ejecuta cuando la operacion se ejecuto correctamente
-                    debugger;
+                    /*debugger;
                     var texto1 = "HOla soy una prueba";
-
+                    */
                     console.log(data);//prueba
                 }
             })
-        </script>
-   
-    }
+
+        $(document).ready(function () {
+                                            //llamando variable
+                //idenfiticador para el id del html
+            tabladata = $("#tabla2").DataTable({
+                responsive: true, //responsiva en entorno movil
+                ordering: false, //ordenamiento de las columnas
+                "ajax": {
+                    url: '@Url.Action("ListarUsuarios","Home")',
+                    type: "GET",
+                    dataType: "json"
+                },
+                "columns": [ //se especifican todas las columnas a emplear en la tabla(se ponen todos los campos de la tabla)
+                    { "data": "Nombres" }, //el origen de la variable data del controlador Home ListarUsuarios
+                    { "data": "Apellidos" },
+                    { "data": "Correo" },
+                    {
+                        //condicion que muestra el resultado de activo con un string
+                        "data": "Activo", "render": function (valor) {
+                            if (valor) {
+                                return '<span class="badge bg-success">Si</span>';
+                            } else {
+                                return '<span class="badge bg-danger">No</span>';
+                            }
+                        }
+                    },
+                    {
+                        //botones en la tabla para editar o eliminar registros de usuarios
+                        //para editar usuarios
+                        "defaultContent": '<button type="button" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i></button>' +
+                                //para eliminar usuarios
+                            '<button type="button" class="btn btn-danger btn-sm ms-2"><i class="fas fa-trash"></i></button>',
+
+                        //quitar ordenamiento
+                        "orderable": false,
+
+                        //para que no aparezca en el text de busqueda
+                        "searchable": false,
+
+                        //cuanto es el ancho de la columna de los botones
+                        "width": "90px"
+                    }
+                ],
+                    //la configuracion de datatable cambie a español
+                "language":{
+                    "url": "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"
+                }
+             });
+        });
+
+
+        //funcionamiento del modal
+        
+        function abrirModal(){
+            
+            //llamando el id del modal
+            //modal() se mostrara el modal puesto
+            $("#FormModal").modal("show");
+        }
+
+    </script>
+
+}
