@@ -25,7 +25,8 @@
             -->
         <div class="row">
             <div class="col-12">
-                <button type="button" class="btn btn-success" onclick="abrirModal()">Crear Usuario</button>
+                <!--El argumento del modal seria nulo porque, se registra un nuevo usuario-->
+                <button type="button" class="btn btn-success" onclick="abrirModal(null)">Crear Usuario</button>
             </div>
         </div>
 
@@ -51,14 +52,19 @@
     
     -se abrira con un boton que se llama 'Crear Usuario'
     -->
-<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!--el data-bs-backdrop lo que hace es que no podra cerrarse el modal sin apretar el boton salir-->
+<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Usuarios</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body g-2"><!--para las grillas de 2x2-->
+                
+                <!--Id de usuario(oculto del modal)-->
+                <input id="txtid" type="hidden" value="0"/>
+
                 <div class="row">
 
                     <div class="col-sm-6">
@@ -77,12 +83,10 @@
                     </div>
 
                     <div class="col-sm-6">
-                        <label for="exampleFormControlInput1" class="form-label">Activo</label>
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <label for="cboactivo" class="form-label">Activo</label>
+                        <select id="cboactivo" class="form-select">
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
                         </select>
                     </div>
 
@@ -90,8 +94,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="Guardar()">Guardar</button>
             </div>
         </div>
     </div>
@@ -105,9 +109,10 @@
     <script>
 
 
-            //creando DataTable para los datos
+        //creando DataTable para los datos
+            //variables globales
             var tabladata;
-
+            var filaSeleccionada;
 
 
             //implementando jquery de la libreria
@@ -160,7 +165,7 @@
                     {
                         //botones en la tabla para editar o eliminar registros de usuarios
                         //para editar usuarios
-                        "defaultContent": '<button type="button" class="btn btn-primary btn-sm"><i class="fas fa-pen"></i></button>' +
+                        "defaultContent": '<button type="button" class="btn btn-primary btn-sm btn-editar"><i class="fas fa-pen"></i></button>' +
                                 //para eliminar usuarios
                             '<button type="button" class="btn btn-danger btn-sm ms-2"><i class="fas fa-trash"></i></button>',
 
@@ -183,12 +188,78 @@
 
 
         //funcionamiento del modal
-        
-        function abrirModal(){
-            
+
+        //la funcion recibira como parametro un json para que se muestre los datos de la tabla
+        function abrirModal(json){
+
+            //si es diferente a nullo se editaran los datos guardados
+            if (json != null) {
+                //se mostrara
+                $("#txtid").val(json.idUsuario);
+                $("#txtnombres").val(json.Nombres);
+                $("#txtapellidos").val(json.Apellidos);
+                $("#txtcorreo").val(json.Correo);
+                $("#cboactivo").val(json.Activo == true ? 1 : 0); //operador ternario
+            } else {
+                //se mostrara
+                $("#txtid").val(0);
+                $("#txtnombres").val("");
+                $("#txtapellidos").val("");
+                $("#txtcorreo").val("");
+                $("#cboactivo").val(1); //operador ternario
+            }
+
             //llamando el id del modal
             //modal() se mostrara el modal puesto
             $("#FormModal").modal("show");
+        }
+
+
+
+        //dandole funcionamiento al boton del lapiz
+        //$(document).ready(function () {
+                //llamando a la tabla y al tbody y la clase del boton para editar
+        $("#tabla2 tbody").on("click", '.btn-editar', function () {
+
+            //llamando la fila donde esta el boton en una variable
+             filaSeleccionada = $(this).closest("tr");
+
+
+            //accediendo a la variable donde tiene la data de la tabla
+
+            var data = tabladata.row(filaSeleccionada).data(); //llama toda la data de la fila
+
+
+            //llamando la funcion del modal
+            abrirModal(data);
+
+            });
+        //});
+
+        //funcion para guardar los datos
+        //(funcion opcional, ya que se haran PROC de DB)
+        function Guardar() {
+            var Usuario = {
+                Activo: $("#cboactivo").val() == 1 ? true : false, //para conseguir el valor activo
+                Apellidos: $("#txtapellidos").val(),
+                Correo: $("#txtcorreo").val(),
+                Nombres: $("#txtnombres").val(),
+                idUsuario:$("#txtid").val()
+            }
+
+            //condicion
+            if (Usuario.idUsuario == 0) {
+                //se llama el id de la tabla
+                //se guarda nuevos usuarios
+                tabladata.row.add(Usuario).draw(false);
+            } else {
+                //para editar filas guardadas
+                tabladata.row(filaSeleccionada).data(Usuario).draw(false);
+
+            }
+
+            //para guardar modal
+            $("#FormModal").modal("hide");
         }
 
     </script>

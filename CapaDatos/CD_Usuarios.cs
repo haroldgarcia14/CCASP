@@ -78,5 +78,101 @@ namespace CapaDatos
 
             return lista;//retorno
         }
+
+        //se creara un nuevo metodo para registrar a los nuevos usuarios
+                            //se declaran los parametros de
+                            //de tipo Usuario y uno de salida de string
+        public int Registrar(Usuario obj, out string Mensaje)
+        {
+            int idautogenerado = 0; //lo que se recibira el id al registrar
+            Mensaje = string.Empty; //mensaje vacio temporal
+
+            try
+            {
+                //se hace la conexion
+                using(SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                {
+                    //se llama el procedimiento almacenado
+                    SqlCommand cmd = new SqlCommand("sp_RegistarUsuario", oconexion);
+                    //se hace el llamado de los campos de la tabla Usuario
+                    //y parametros del procedimiento almacenado
+                    cmd.Parameters.AddWithValue("Nombres", obj.Nombres);
+                    cmd.Parameters.AddWithValue("Apellidos",obj.Apellidos);
+                    cmd.Parameters.AddWithValue("Correo", obj.Correo);
+                    cmd.Parameters.AddWithValue("Clave", obj.Clave);
+                    cmd.Parameters.AddWithValue("Activo", obj.Activo);
+
+                    //parametros de salida
+                    cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
+                    
+                    //se indica el tipo de comando que se va a ejecutar
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    //abriendo conexion
+                    oconexion.Open();
+
+                    //ejecutar el comando
+                    cmd.ExecuteNonQuery();
+
+                    //se retorna el parametro de salida
+                    //que guarde el ultimo id que se ha registrado
+                    idautogenerado = Convert.ToInt32(cmd.Parameters["Resultado"].Value);
+                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                }
+            }
+            catch(Exception ex)
+            {
+                idautogenerado = 0;
+                Mensaje = ex.Message;
+            }
+            return idautogenerado;
+        }
+
+        //metodo para editar lo usuarios ya registrados
+        public bool Editar(Usuario obj, out string Mensaje)
+        {
+            bool resultado = false;
+            Mensaje = string.Empty;
+
+            try
+            {
+                using(SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                {
+                    //se llama el procedimiento almacenado
+                    SqlCommand cmd = new SqlCommand("sp_EditarUsuario", oconexion);
+
+                    //se hace el llamado de los campos de la tabla Usuario
+                    //y parametros del procedimiento almacenado
+                    cmd.Parameters.AddWithValue("IdUsuario", obj.idUsuario);
+                    cmd.Parameters.AddWithValue("Nombres", obj.Nombres);
+                    cmd.Parameters.AddWithValue("Apellidos", obj.Apellidos);
+                    cmd.Parameters.AddWithValue("Correo", obj.Correo);
+                    cmd.Parameters.AddWithValue("Clave", obj.Clave);
+                    cmd.Parameters.AddWithValue("Activo", obj.Activo);
+
+                    //parametros de salida
+                    cmd.Parameters.Add("Resultado", SqlDbType.Bit).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
+
+                    //abriendo conexion
+                    oconexion.Open();
+
+                    //ejecutar el comando
+                    cmd.ExecuteNonQuery();
+
+                    //se retorna el parametro de salida
+                    //que guarde el ultimo id que se ha registrado
+                    resultado = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+                    Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+                }
+            }
+            catch(Exception ex)
+            {
+                resultado = false;
+                Mensaje = ex.Message;
+            }
+            return resultado;
+        }
     }
 }
